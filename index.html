@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Interativo: Toxicocinética e Toxicodinâmica</title>
+  <style>
+    :root {
+      --primary: #5c2d91;
+      --primary-light: #7b42b8;
+      --success: #28a745;
+      --danger: #dc3545;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --text: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
+    .container { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: 24px; }
+    .progress-bar-container { background: #e0e0e0; border-radius: 10px; height: 10px; width: 100%; margin-bottom: 20px; overflow: hidden; }
+    .progress-bar { background: var(--primary); height: 100%; width: 0%; transition: width 0.3s ease; }
+    .badge { display: inline-block; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 20px; background: #eee; color: #555; margin-bottom: 12px; }
+    h2 { font-size: 1.25rem; margin-bottom: 20px; line-height: 1.4; }
+    .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn { background: #fff; border: 2px solid #ddd; padding: 12px 16px; border-radius: 10px; font-size: 1rem; text-align: left; cursor: pointer; transition: all 0.2s; }
+    .option-btn:hover:not([disabled]) { border-color: var(--primary-light); background: #fdfbff; }
+    .option-btn.correct { background: #e8f5e9; border-color: var(--success); color: var(--success); font-weight: bold; }
+    .option-btn.wrong { background: #ffebee; border-color: var(--danger); color: var(--danger); }
+    .feedback-card { display: none; padding: 14px; border-radius: 10px; margin-bottom: 20px; line-height: 1.4; font-size: 0.95rem; }
+    .feedback-card.show { display: block; background: #f0f4ff; border-left: 4px solid var(--primary); }
+    .btn-action { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; display: none; }
+    .btn-action.show { display: block; }
+    .result-screen, .rating-screen { display: none; text-align: center; }
+    .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--primary); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px auto; font-size: 2rem; font-weight: bold; }
+    .star-rating { display: flex; justify-content: center; gap: 8px; margin: 16px 0; font-size: 2rem; cursor: pointer; }
+    .star { color: #ccc; transition: color 0.2s; }
+    .star.active { color: #ffb800; }
+    textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: none; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Tela do Quiz -->
+  <div id="quiz-screen">
+    <div class="progress-bar-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <span id="question-number" class="badge">Questão 1 de 20</span>
+    <h2 id="question-text">Texto da Pergunta</h2>
+    <div id="options-container" class="options-list"></div>
+    <div id="feedback-card" class="feedback-card"></div>
+    <button id="next-btn" class="btn-action" onclick="proximaQuestao()">Próxima Questão</button>
+  </div>
+
+  <!-- Tela de Resultados -->
+  <div id="result-screen" class="result-screen">
+    <h2>Teste Concluído!</h2>
+    <div class="score-circle">
+      <span id="final-score">0</span>
+      <span style="font-size: 0.8rem; font-weight: normal;">de 20</span>
+    </div>
+    <p id="feedback-msg" style="margin-bottom: 24px;"></p>
+    <button class="btn-action show" onclick="irParaAvaliacao()">Avaliar a Atividade</button>
+  </div>
+
+  <!-- Tela de Avaliação da Aula -->
+  <div id="rating-screen" class="rating-screen">
+    <h2>Avalie a Aula de Hoje</h2>
+    <p style="color: #666; font-size: 0.9rem; margin-top: 8px;">Sua opinião nos ajuda a melhorar os próximos materiais pedagógicos.</p>
+    <div class="star-rating" id="stars">
+      <span class="star" onclick="avaliar(1)">★</span>
+      <span class="star" onclick="avaliar(2)">★</span>
+      <span class="star" onclick="avaliar(3)">★</span>
+      <span class="star" onclick="avaliar(4)">★</span>
+      <span class="star" onclick="avaliar(5)">★</span>
+    </div>
+    <textarea id="comment" rows="3" placeholder="Deixe um comentário sobre a dinâmica ou o conteúdo (opcional)..."></textarea>
+    <button class="btn-action show" style="margin-top: 16px;" onclick="finalizar()">Enviar Avaliação</button>
+  </div>
+</div>
+
+<script>
+  const questoes = [
+    {
+      pergunta: "Qual etapa da toxicocinética é definida pela passagem do tóxico da porta de entrada até a circulação sistêmica?",
+      opcoes: ["Distribuição", "Absorção", "Biotransformação", "Excreção"],
+      correta: 1,
+      explicacao: "A Absorção é a primeira etapa do processo ADME, onde a molécula atravessa as membranas biológicas e chega ao sangue."
+    },
+    {
+      pergunta: "Por que a via respiratória (inalatória) apresenta absorção quase tão rápida quanto a parenteral?",
+      opcoes: ["Devido à presença do muco gástrico", "Pela grande superfície alveolar e alta vascularização", "Porque não passa pela traqueia", "Porque os alvéolos retêm substâncias hidrossolúveis"],
+      correta: 1,
+      explicacao: "Os alvéolos pulmonares possuem extensa área superficial e rede capilar contínua, permitindo absorção sistêmica imediata."
+    },
+    {
+      pergunta: "Qual das frações do xenobiótico no plasma é farmacologicamente e toxicologicamente ativa?",
+      opcoes: ["Fração ligada à albumina", "Fração ionizada insolúvel", "Fração livre", "Fração conjugada da Fase II"],
+      correta: 2,
+      explicacao: "Apenas as moléculas livres conseguem se difundir pelos tecidos e interagir com os receptores celulares específicos."
+    },
+    {
+      pergunta: "O que significa dizer que uma substância possui uma DL50 muito baixa?",
+      opcoes: ["A substância tem baixa toxicidade", "A substância é altamente tóxica", "Apenas 50% dos animais sobrevivem sem sintomas", "A substância é eliminada em 50 minutos"],
+      correta: 1,
+      explicacao: "Quanto menor a dose necessária para causar a morte de 50% da população testada, mais potente e tóxica é a substância."
+    },
+    {
+      pergunta: "Na intoxicação por paracetamol, qual metabólito reativo é formado em excesso pela CYP2E1 e depleta a glutationa?",
+      opcoes: ["Ácido glicurônico", "Sulfato ativo", "NAPQI (N-acetil-p-benzoquinona imina)", "N-acetilcisteína"],
+      correta: 2,
+      explicacao: "Quando as vias normais de conjugação saturam, a via oxidativa gera o NAPQI, causando necrose celular nos hepatócitos."
+    }
+  ];
+
+  let questaoAtual = 0;
+  let pontuacao = 0;
+  let estrelas = 0;
+
+  function carregarQuestao() {
+    const q = questoes[questaoAtual];
+    document.getElementById("progress-bar").style.width = ((questaoAtual) / questoes.length * 100) + "%";
+    document.getElementById("question-number").innerText = `Questão ${questaoAtual + 1} de ${questoes.length}`;
+    document.getElementById("question-text").innerText = q.pergunta;
+    
+    const container = document.getElementById("options-container");
+    container.innerHTML = "";
+    document.getElementById("feedback-card").className = "feedback-card";
+    document.getElementById("next-btn").className = "btn-action";
+
+    q.opcoes.forEach((opcao, index) => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.innerText = opcao;
+      btn.onclick = () => checarResposta(index);
+      container.appendChild(btn);
+    });
+  }
+
+  function checarResposta(selecionada) {
+    const q = questoes[questaoAtual];
+    const botoes = document.querySelectorAll(".option-btn");
+    botoes.forEach(b => b.disabled = true);
+
+    const feedback = document.getElementById("feedback-card");
+    if (selecionada === q.correta) {
+      botoes[selecionada].classList.add("correct");
+      feedback.innerHTML = `<strong>Correto!</strong> ${q.explicacao}`;
+      pontuacao++;
+    } else {
+      botoes[selecionada].classList.add("wrong");
+      botoes[q.correta].classList.add("correct");
+      feedback.innerHTML = `<strong>Incorreto.</strong> ${q.explicacao}`;
+    }
+    feedback.classList.add("show");
+    document.getElementById("next-btn").classList.add("show");
+  }
+
+  function proximaQuestao() {
+    questaoAtual++;
+    if (questaoAtual < questoes.length) {
+      carregarQuestao();
+    } else {
+      mostrarResultado();
+    }
+  }
+
+  function mostrarResultado() {
+    document.getElementById("quiz-screen").style.display = "none";
+    document.getElementById("result-screen").style.display = "block";
+    document.getElementById("final-score").innerText = pontuacao;
+    
+    const msg = document.getElementById("feedback-msg");
+    const perc = (pontuacao / questoes.length) * 100;
+    if (perc >= 80) msg.innerText = "Excelente desempenho! Domínio sólido dos conceitos.";
+    else if (perc >= 60) msg.innerText = "Bom trabalho! Vale a pena revisar os detalhes de biotransformação.";
+    else msg.innerText = "Recomendamos revisar os slides de ADME e mecanismos de toxicidade.";
+  }
+
+  function irParaAvaliacao() {
+    document.getElementById("result-screen").style.display = "none";
+    document.getElementById("rating-screen").style.display = "block";
+  }
+
+  function avaliar(n) {
+    estrelas = n;
+    const s = document.querySelectorAll(".star");
+    s.forEach((el, idx) => {
+      el.classList.toggle("active", idx < n);
+    });
+  }
+
+  function finalizar() {
+    alert("Avaliação recebida! Obrigado por participar.");
+    location.reload();
+  }
+
+  carregarQuestao();
+</script>
+</body>
+</html>
