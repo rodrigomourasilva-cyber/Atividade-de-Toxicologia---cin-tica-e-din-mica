@@ -41,7 +41,6 @@
 <body>
 
 <div class="container">
-  <!-- Tela do Quiz -->
   <div id="quiz-screen">
     <div class="progress-bar-container">
       <div id="progress-bar" class="progress-bar"></div>
@@ -53,7 +52,6 @@
     <button id="next-btn" class="btn-action" onclick="proximaQuestao()">Próxima Questão</button>
   </div>
 
-  <!-- Tela de Resultados -->
   <div id="result-screen" class="result-screen">
     <h2>Teste Concluído!</h2>
     <div class="score-circle">
@@ -64,10 +62,9 @@
     <button class="btn-action show" onclick="irParaAvaliacao()">Avaliar a Atividade</button>
   </div>
 
-  <!-- Tela de Avaliação da Aula -->
   <div id="rating-screen" class="rating-screen">
     <h2>Avalie a Aula de Hoje</h2>
-    <p style="color: #666; font-size: 0.9rem; margin-top: 8px;">Sua opinião nos ajuda a melhorar os próximos materiais pedagógicos.</p>
+    <p style="color: #666; font-size: 0.9rem; margin-top: 8px;">Sua opinião ajuda a melhorar os próximos materiais da FIEB.</p>
     <div class="star-rating" id="stars">
       <span class="star" onclick="avaliar(1)">★</span>
       <span class="star" onclick="avaliar(2)">★</span>
@@ -83,34 +80,124 @@
 <script>
   const questoes = [
     {
-      pergunta: "Qual etapa da toxicocinética é definida pela passagem do tóxico da porta de entrada até a circulação sistêmica?",
-      opcoes: ["Distribuição", "Absorção", "Biotransformação", "Excreção"],
+      pergunta: "O que a toxicocinética estuda no organismo?",
+      opcoes: ["Apenas a eliminação do agente tóxico.", "O movimento do agente tóxico, da entrada até a eliminação.", "As alterações estruturais causadas nas células.", "A interação do tóxico com receptores específicos."],
       correta: 1,
-      explicacao: "A Absorção é a primeira etapa do processo ADME, onde a molécula atravessa as membranas biológicas e chega ao sangue."
+      explicacao: "A toxicocinética define o caminho do tóxico no organismo (Absorção, Distribuição, Metabolismo e Excreção)[cite: 1]."
     },
     {
-      pergunta: "Por que a via respiratória (inalatória) apresenta absorção quase tão rápida quanto a parenteral?",
-      opcoes: ["Devido à presença do muco gástrico", "Pela grande superfície alveolar e alta vascularização", "Porque não passa pela traqueia", "Porque os alvéolos retêm substâncias hidrossolúveis"],
+      pergunta: "Quais são as quatro etapas do processo ADME?",
+      opcoes: ["Ação, Distribuição, Mutação e Excreção.", "Absorção, Distribuição, Metabolismo (Biotransformação) e Excreção.", "Absorção, Diluição, Metabolismo e Eliminação.", "Ação, Diluição, Modulação e Excreção."],
       correta: 1,
-      explicacao: "Os alvéolos pulmonares possuem extensa área superficial e rede capilar contínua, permitindo absorção sistêmica imediata."
+      explicacao: "ADME compreende as fases de Absorção, Distribuição, Metabolismo (ou Biotransformação) e Excreção[cite: 1]."
     },
     {
-      pergunta: "Qual das frações do xenobiótico no plasma é farmacologicamente e toxicologicamente ativa?",
-      opcoes: ["Fração ligada à albumina", "Fração ionizada insolúvel", "Fração livre", "Fração conjugada da Fase II"],
+      pergunta: "Qual via de exposição costuma levar o tóxico à circulação sistêmica de forma muito rápida devido à alta vascularização?",
+      opcoes: ["Via oral", "Via cutânea", "Via respiratória (inalatória)", "Via ocular"],
       correta: 2,
-      explicacao: "Apenas as moléculas livres conseguem se difundir pelos tecidos e interagir com os receptores celulares específicos."
+      explicacao: "A via respiratória permite absorção muito rápida graças à grande superfície alveolar e sua alta vascularização[cite: 1]."
     },
     {
-      pergunta: "O que significa dizer que uma substância possui uma DL50 muito baixa?",
-      opcoes: ["A substância tem baixa toxicidade", "A substância é altamente tóxica", "Apenas 50% dos animais sobrevivem sem sintomas", "A substância é eliminada em 50 minutos"],
+      pergunta: "A via de exposição parenteral (injetável) possui qual característica em relação à absorção?",
+      opcoes: ["Absorção imediata, pois o tóxico cai direto na circulação.", "Absorção lenta, dependendo da hidratação do tecido.", "Sofre grande efeito de primeira passagem hepática.", "Requer biotransformação antes de ser absorvida."],
+      correta: 0,
+      explicacao: "Na via parenteral (especialmente intravenosa), não há processo de absorção, a substância entra imediatamente na corrente sanguínea[cite: 1]."
+    },
+    {
+      pergunta: "Quais características facilitam a passagem de um tóxico através das membranas biológicas na fase de absorção?",
+      opcoes: ["Forma ionizada e hidrossolubilidade.", "Forma não-ionizada e lipossolubilidade.", "Baixo pH e alta viscosidade.", "Forma ionizada e grande superfície de contato."],
       correta: 1,
-      explicacao: "Quanto menor a dose necessária para causar a morte de 50% da população testada, mais potente e tóxica é a substância."
+      explicacao: "As membranas biológicas são permeáveis principalmente a substâncias na sua forma não-ionizada e que possuem alta lipossolubilidade[cite: 1]."
     },
     {
-      pergunta: "Na intoxicação por paracetamol, qual metabólito reativo é formado em excesso pela CYP2E1 e depleta a glutationa?",
-      opcoes: ["Ácido glicurônico", "Sulfato ativo", "NAPQI (N-acetil-p-benzoquinona imina)", "N-acetilcisteína"],
+      pergunta: "Durante a distribuição do tóxico pelo sangue, qual fração é considerada farmacologicamente ativa?",
+      opcoes: ["Fração ligada às proteínas plasmáticas.", "Fração conjugada da Fase II.", "Fração livre.", "Fração excretada pelos rins."],
       correta: 2,
-      explicacao: "Quando as vias normais de conjugação saturam, a via oxidativa gera o NAPQI, causando necrose celular nos hepatócitos."
+      explicacao: "Apenas a fração livre (não ligada a proteínas como a albumina) é ativa e capaz de interagir com os tecidos alvo[cite: 1]."
+    },
+    {
+      pergunta: "A barreira hematoencefálica dificulta principalmente a entrada de quais tipos de substâncias no sistema nervoso central?",
+      opcoes: ["Substâncias muito lipossolúveis.", "Substâncias hidrossolúveis.", "Gases tóxicos.", "Solventes industriais lipídicos."],
+      correta: 1,
+      explicacao: "A barreira hematoencefálica protege o SNC dificultando a entrada de substâncias hidrossolúveis, mas permite a passagem das muito lipossolúveis[cite: 1]."
+    },
+    {
+      pergunta: "Onde ocorre predominantemente o processo de biotransformação (metabolismo)?",
+      opcoes: ["Nos rins.", "No estômago.", "No fígado.", "Nos pulmões."],
+      correta: 2,
+      explicacao: "O fígado é o principal órgão responsável por transformar o tóxico em substâncias mais hidrossolúveis para facilitar a excreção[cite: 1]."
+    },
+    {
+      pergunta: "O que é o fenômeno da bioativação?",
+      opcoes: ["Quando a eliminação renal é acelerada.", "Quando a biotransformação gera metabólitos ainda mais tóxicos.", "A neutralização imediata do tóxico no estômago.", "O bloqueio dos receptores por antagonistas."],
+      correta: 1,
+      explicacao: "Em alguns casos, a metabolização não inativa a substância, mas sim gera um metabólito com toxicidade maior do que a molécula original[cite: 1]."
+    },
+    {
+      pergunta: "Qual é a principal via de excreção dos agentes tóxicos e seus metabólitos?",
+      opcoes: ["Via pulmonar.", "Via renal (urina).", "Via biliar/fecal.", "Via cutânea."],
+      correta: 1,
+      explicacao: "A eliminação pelos rins, através da urina, é a principal e mais importante via de excreção do organismo[cite: 1]."
+    },
+    {
+      pergunta: "O que a toxicodinâmica estuda?",
+      opcoes: ["O trajeto do tóxico pelo sistema digestivo.", "Como o tóxico age nas células e tecidos, causando alterações.", "A velocidade de eliminação renal.", "A lipossolubilidade das membranas."],
+      correta: 1,
+      explicacao: "A toxicodinâmica foca em 'o que o tóxico faz com o corpo', estudando seus mecanismos de ação nas células[cite: 1]."
+    },
+    {
+      pergunta: "No modelo chave-fechadura de receptores, como atua um agente antagonista?",
+      opcoes: ["Ele ativa o receptor, imitando uma substância natural.", "Ele destrói estruturalmente o receptor.", "Ele ocupa o receptor e bloqueia a resposta normal.", "Ele se liga ao DNA impedindo a replicação celular."],
+      correta: 2,
+      explicacao: "Um antagonista bloqueia o receptor, impedindo que a molécula mensageira natural se ligue e ative a resposta biológica[cite: 1]."
+    },
+    {
+      pergunta: "Os organofosforados são exemplos clássicos de tóxicos que atuam por inibição enzimática. Qual enzima eles bloqueiam?",
+      opcoes: ["Glutationa.", "Albumina plasmática.", "Acetilcolinesterase.", "Enzimas CYP450."],
+      correta: 2,
+      explicacao: "Eles inibem a acetilcolinesterase, causando um acúmulo excessivo de acetilcolina e resultando em síndrome colinérgica[cite: 1]."
+    },
+    {
+      pergunta: "Qual é o principal dano celular provocado pelo estresse oxidativo mediado por radicais livres?",
+      opcoes: ["Aceleração da excreção renal.", "Hiperativação dos receptores.", "Peroxidação lipídica, que compromete a membrana celular.", "Aumento na produção de albumina."],
+      correta: 2,
+      explicacao: "Os radicais livres atacam lipídios (peroxidação lipídica), o que rompe a integridade da membrana e pode causar a morte celular[cite: 1]."
+    },
+    {
+      pergunta: "Na toxicologia, o que o indicador DL50 representa?",
+      opcoes: ["A dose necessária para tratar 50% dos pacientes.", "A dose capaz de causar a morte de 50% da população testada.", "O tempo (50 horas) para eliminação total do tóxico.", "O limite seguro de exposição diária."],
+      correta: 1,
+      explicacao: "A Dose Letal 50 (DL50) é o parâmetro utilizado para avaliar e comparar o quão letal uma substância é para uma população[cite: 1]."
+    },
+    {
+      pergunta: "Qual é a relação direta entre o valor da DL50 e a toxicidade de uma substância?",
+      opcoes: ["Quanto MAIOR a DL50, MAIOR a toxicidade.", "A DL50 não tem relação com a toxicidade.", "Quanto MENOR a DL50, MAIOR a toxicidade.", "A toxicidade só é medida pela via de exposição."],
+      correta: 2,
+      explicacao: "Se uma dose muito pequena já é capaz de ser letal para 50% da população, significa que o composto é altamente tóxico[cite: 1]."
+    },
+    {
+      pergunta: "Quais fatores inerentes ao próprio indivíduo podem modular a gravidade de uma resposta tóxica?",
+      opcoes: ["Apenas a dose administrada.", "Apenas o tempo de exposição.", "Idade, genética, estado nutricional e de saúde.", "O grau de ionização do medicamento."],
+      correta: 2,
+      explicacao: "Fatores biológicos próprios do paciente (como a função renal/hepática, genética e idade) influenciam a intensidade da resposta tóxica[cite: 1]."
+    },
+    {
+      pergunta: "No estudo de caso clínico de intoxicação por paracetamol, o excesso é metabolizado por qual enzima na Fase I?",
+      opcoes: ["Acetilcolinesterase", "CYP2E1", "Glutationa redutase", "Albumina"],
+      correta: 1,
+      explicacao: "Quando as vias de Fase II saturam, o CYP2E1 assume a metabolização do paracetamol, gerando o metabólito tóxico[cite: 1]."
+    },
+    {
+      pergunta: "Qual é a sigla do metabólito tóxico responsável pela necrose hepática na overdose de paracetamol?",
+      opcoes: ["GSH", "CYP450", "ADME", "NAPQI"],
+      correta: 3,
+      explicacao: "A bioativação do paracetamol gera o NAPQI, um metabólito que esgota as reservas de glutationa e causa danos severos ao fígado[cite: 1]."
+    },
+    {
+      pergunta: "Qual é o tratamento/antídoto utilizado para repor a glutationa e neutralizar o NAPQI na intoxicação por paracetamol?",
+      opcoes: ["Atropina", "N-acetilcisteína", "Carvão ativado contínuo", "Diálise imediata"],
+      correta: 1,
+      explicacao: "A N-acetilcisteína é administrada para repor os estoques de glutationa e agir diretamente na neutralização do NAPQI[cite: 1]."
     }
   ];
 
